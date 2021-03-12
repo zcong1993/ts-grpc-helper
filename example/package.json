@@ -1,0 +1,10 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/google-protobuf": "^3.7.4",
+    "grpc-tools": "^1.10.0",
+    "ts-protoc-gen": "^0.14.0"
+  }
+}

@@ -3,36 +3,6 @@ import { Observable } from 'rxjs'
 
 export const GRPC_CANCELLED = 'Cancelled'
 
-export const wrapperClientUnaryCall = <Req = any, Res = any>(
-  fn: any,
-  client: grpc.Client
-): ((
-  req: Req,
-  metadata?: grpc.Metadata,
-  callOptions?: grpc.CallOptions
-) => Promise<Res>) => {
-  const f: any = async (
-    req: Req,
-    metadata?: grpc.Metadata,
-    callOptions?: grpc.CallOptions
-  ) => {
-    return new Promise((resolve, reject) => {
-      fn.call(
-        client,
-        ...[req, metadata, callOptions].filter(Boolean),
-        (err: any, data: any) => {
-          if (err) {
-            return reject(err)
-          }
-          resolve(data)
-        }
-      )
-    })
-  }
-
-  return f
-}
-
 export type ClientReadableStreamRequest<
   T extends grpc.ClientReadableStream<any>
 > = T extends grpc.ClientReadableStream<infer Req> ? Req : never

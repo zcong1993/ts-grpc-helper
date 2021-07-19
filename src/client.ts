@@ -3,14 +3,20 @@ import { Observable } from 'rxjs'
 
 export const GRPC_CANCELLED = 'Cancelled'
 
-export type ClientReadableStreamRequest<
-  T extends grpc.ClientReadableStream<any>
-> = T extends grpc.ClientReadableStream<infer Req> ? Req : never
+export type ClientReadableStreamRes<
+  T extends grpc.ClientReadableStream<any> | grpc.ClientDuplexStream<any, any>
+> = T extends grpc.ClientDuplexStream<any, infer Res>
+  ? Res
+  : T extends grpc.ClientReadableStream<infer Res>
+  ? Res
+  : never
 
-export const readStreamToObserver = <T extends grpc.ClientReadableStream<any>>(
+export const readStreamToObserver = <
+  T extends grpc.ClientReadableStream<any> | grpc.ClientDuplexStream<any, any>
+>(
   call: T
-): Observable<ClientReadableStreamRequest<T>> => {
-  const stream = new Observable<ClientReadableStreamRequest<T>>((observer) => {
+): Observable<ClientReadableStreamRes<T>> => {
+  const stream = new Observable<ClientReadableStreamRes<T>>((observer) => {
     let isClientCanceled = false
     call.on('data', (data: any) => observer.next(data))
     call.on('error', (error: any) => {

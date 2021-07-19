@@ -11,7 +11,8 @@ import * as hello_pb from './generated/hello_pb'
 import { IHelloServer, HelloService } from './generated/hello_grpc_pb'
 
 const helloServer: IHelloServer = {
-  echo: toHandleUnaryCall(async (req, md) => {
+  echo: toHandleUnaryCall(async (req, md, call) => {
+    call.sendMetadata(md)
     return req
   }),
   serverStream: toHandleServerStreamingCall(async (req, md, call) => {
@@ -23,6 +24,8 @@ const helloServer: IHelloServer = {
       res = data
       console.log(data.toObject())
     })
+
+    call.sendMetadata(md)
 
     return res
   }),

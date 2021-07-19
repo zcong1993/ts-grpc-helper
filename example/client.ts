@@ -4,6 +4,7 @@ import {
   observerToWriteStream,
   readStreamToObserver,
   promisifyUnaryCall,
+  promisifyClientStream,
 } from '../src'
 import * as pb from './generated/hello_pb'
 import { HelloClient } from './generated/hello_grpc_pb'
@@ -33,30 +34,59 @@ const testStream = async (c: HelloClient) => {
 }
 
 const testClientStream = async (c: HelloClient) => {
-  return new Promise((resolve, reject) => {
-    const call = c.clientStream((err, resp) => {
-      if (err) {
-        console.log(err)
-        reject(err)
-      } else {
-        console.log(resp.toObject())
-        resolve(resp)
-      }
-    })
+  const m = new grpc.Metadata()
+  m.set('hello', 'xxx')
 
-    observerToWriteStream(
-      from(
-        Array(5)
-          .fill(null)
-          .map((_, i) => {
-            const req = new pb.EchoRequest()
-            req.setMessage(`test ${i}`)
-            return req
-          })
-      ),
-      call
-    )
+  const [call, p] = promisifyClientStream(c.clientStream, c, m)
+
+  observerToWriteStream(
+    from(
+      Array(5)
+        .fill(null)
+        .map((_, i) => {
+          const req = new pb.EchoRequest()
+          req.setMessage(`test ${i}`)
+          return req
+        })
+    ),
+    call
+  )
+
+  call.on('metadata', (md) => {
+    console.log('md', md)
   })
+
+  const resp = await p
+  console.log(resp.toObject())
+
+  // return new Promise((resolve, reject) => {
+  //   const call = c.clientStream(m, (err, resp) => {
+  //     if (err) {
+  //       console.log(err)
+  //       reject(err)
+  //     } else {
+  //       console.log(resp.toObject())
+  //       resolve(resp)
+  //     }
+  //   })
+
+  //   call.on('metadata', md => {
+  //     console.log('md', md)
+  //   })
+
+  //   observerToWriteStream(
+  //     from(
+  //       Array(5)
+  //         .fill(null)
+  //         .map((_, i) => {
+  //           const req = new pb.EchoRequest()
+  //           req.setMessage(`test ${i}`)
+  //           return req
+  //         })
+  //     ),
+  //     call
+  //   )
+  // })
 }
 
 const testDuplexStream = async (c: HelloClient) => {

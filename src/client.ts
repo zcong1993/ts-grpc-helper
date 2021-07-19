@@ -56,6 +56,29 @@ export const observerToWriteStream = <T = any>(
   })
 }
 
+export function promisifyClientStream<
+  T extends (...args: any[]) => grpc.ClientWritableStream<any>
+>(
+  clientStream: T,
+  c: grpc.Client,
+  ...args: GetOverloadArgs<PromisifyUnary<GetOverloadArgs<T>>>
+) {
+  let call: any
+  const p = new Promise((resolve, reject) => {
+    call = clientStream.call(c, ...args, (err: any, resp: any) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve(resp)
+    })
+  })
+
+  return ([call, p] as any) as [
+    ReturnType<T>,
+    GetOverloadReturnType<PromisifyClientStream<T>>
+  ]
+}
+
 export interface Response<Res> {
   res: Res
   status: grpc.StatusObject
@@ -117,6 +140,18 @@ export type GetOverloadArgs<T> = T extends {
   ? U
   : never
 
+export type GetOverloadReturnType<T> = T extends {
+  (...o: any[]): infer U
+  (...o: any[]): infer U2
+  (...o: any[]): infer U3
+}
+  ? U | U2 | U3
+  : T extends { (...o: infer U): void; (...o: infer U2): void }
+  ? U | U2
+  : T extends { (...o: infer U): void }
+  ? U
+  : never
+
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
   k: infer I
 ) => void
@@ -125,4 +160,22 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 
 export type PromisifyUnaryCall<T> = UnionToIntersection<
   PromisifyUnary<GetOverloadArgs<T>>
+>
+
+export type PromisifyWithoutResponseWrapper<T extends any[]> = T extends [
+  Callback<infer U>?
+]
+  ? () => Promise<U>
+  : T extends [infer T1, Callback<infer P>?]
+  ? (arg1: T1) => Promise<P>
+  : T extends [infer T1, infer T2, Callback<infer U>?]
+  ? (arg1: T1, arg2: T2) => Promise<U>
+  : T extends [infer T1, infer T2, infer T3, Callback<infer U>?]
+  ? (arg1: T1, arg2: T2, arg3: T3) => Promise<U>
+  : T extends [infer T1, infer T2, infer T3, infer T4, Callback<infer U>?]
+  ? (arg1: T1, arg2: T2, arg3: T3, arg4: T4) => Promise<U>
+  : T
+
+export type PromisifyClientStream<T> = UnionToIntersection<
+  PromisifyWithoutResponseWrapper<GetOverloadArgs<T>>
 >

@@ -198,23 +198,26 @@ const testStream = async (c: HelloClient) => {
 
 ```ts
 const testClientStream = async (c: HelloClient) => {
-  const call = c.clientStream((err, resp) => {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(resp)
-    }
-  })
+  const m = new grpc.Metadata()
+  m.set('hello', 'xxx')
 
-  Array(5)
-    .fill(null)
-    .forEach((_, i) => {
-      const req = new pb.EchoRequest()
-      req.setMessage(`test ${i}`)
-      call.write(req)
-    })
+  const [call, p] = promisifyClientStream(c.clientStream, c, m)
 
-  call.end()
+  observerToWriteStream(
+    from(
+      Array(5)
+        .fill(null)
+        .map((_, i) => {
+          const req = new pb.EchoRequest()
+          req.setMessage(`test ${i}`)
+          return req
+        })
+    ),
+    call
+  )
+
+  const resp = await p
+  console.log(resp.toObject())
 }
 ```
 

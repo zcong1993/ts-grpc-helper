@@ -58,35 +58,40 @@ const testClientStream = async (c: HelloClient) => {
 
   const resp = await p
   console.log(resp.toObject())
+}
 
-  // return new Promise((resolve, reject) => {
-  //   const call = c.clientStream(m, (err, resp) => {
-  //     if (err) {
-  //       console.log(err)
-  //       reject(err)
-  //     } else {
-  //       console.log(resp.toObject())
-  //       resolve(resp)
-  //     }
-  //   })
+const testClientStream2 = async (c: HelloClient) => {
+  const m = new grpc.Metadata()
+  m.set('hello', 'xxx')
 
-  //   call.on('metadata', md => {
-  //     console.log('md', md)
-  //   })
+  return new Promise((resolve, reject) => {
+    const call = c.clientStream(m, (err, resp) => {
+      if (err) {
+        console.log(err)
+        reject(err)
+      } else {
+        console.log(resp.toObject())
+        resolve(resp)
+      }
+    })
 
-  //   observerToWriteStream(
-  //     from(
-  //       Array(5)
-  //         .fill(null)
-  //         .map((_, i) => {
-  //           const req = new pb.EchoRequest()
-  //           req.setMessage(`test ${i}`)
-  //           return req
-  //         })
-  //     ),
-  //     call
-  //   )
-  // })
+    call.on('metadata', (md) => {
+      console.log('md', md)
+    })
+
+    observerToWriteStream(
+      from(
+        Array(5)
+          .fill(null)
+          .map((_, i) => {
+            const req = new pb.EchoRequest()
+            req.setMessage(`test ${i}`)
+            return req
+          })
+      ),
+      call
+    )
+  })
 }
 
 const testDuplexStream = async (c: HelloClient) => {
@@ -120,6 +125,8 @@ const main = async () => {
   await testStream(c)
   console.log('\n\ntest client stream\n\n')
   await testClientStream(c)
+  console.log('\n\ntest client stream 2\n\n')
+  await testClientStream2(c)
   console.log('\n\ntest duplex stream\n\n')
   await testDuplexStream(c)
 }

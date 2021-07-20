@@ -1,3 +1,4 @@
 * text=auto
 .eslintrc.js linguist-vendored
 example/** linguist-vendored
+__test__/fixture/generated/* linguist-generated

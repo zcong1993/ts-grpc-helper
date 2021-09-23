@@ -1,6 +1,6 @@
 # ts-grpc-helper
 
-[![NPM version](https://img.shields.io/npm/v/@zcong/ts-grpc-helper.svg?style=flat)](https://npmjs.com/package/@zcong/ts-grpc-helper) [![NPM downloads](https://img.shields.io/npm/dm/@zcong/ts-grpc-helper.svg?style=flat)](https://npmjs.com/package/@zcong/ts-grpc-helper) [![JS Test](https://github.com/zcong1993/ts-grpc-helper/actions/workflows/test.yml/badge.svg)](https://github.com/zcong1993/ts-grpc-helper/actions/workflows/test.yml)
+[![NPM version](https://img.shields.io/npm/v/@zcong/ts-grpc-helper.svg?style=flat)](https://npmjs.com/package/@zcong/ts-grpc-helper) [![NPM downloads](https://img.shields.io/npm/dm/@zcong/ts-grpc-helper.svg?style=flat)](https://npmjs.com/package/@zcong/ts-grpc-helper) [![JS Test](https://github.com/zcong1993/ts-grpc-helper/actions/workflows/js-test.yml/badge.svg)](https://github.com/zcong1993/ts-grpc-helper/actions/workflows/js-test.yml)
 
 > ts grpc helper
 

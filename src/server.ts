@@ -4,12 +4,10 @@ import { catchError, takeUntil } from 'rxjs/operators'
 
 export const CANCEL_EVENT = 'cancelled'
 
-export type UnaryCallRequest<
-  T extends grpc.handleUnaryCall<any, any>
-> = T extends grpc.handleUnaryCall<infer Req, any> ? Req : never
-export type UnaryCallResponse<
-  T extends grpc.handleUnaryCall<any, any>
-> = T extends grpc.handleUnaryCall<any, infer Res> ? Res : never
+export type UnaryCallRequest<T extends grpc.handleUnaryCall<any, any>> =
+  T extends grpc.handleUnaryCall<infer Req, any> ? Req : never
+export type UnaryCallResponse<T extends grpc.handleUnaryCall<any, any>> =
+  T extends grpc.handleUnaryCall<any, infer Res> ? Res : never
 export type ServerStreamingCallRequest<
   T extends grpc.handleServerStreamingCall<any, any>
 > = T extends grpc.handleServerStreamingCall<infer Req, any> ? Req : never
@@ -42,7 +40,7 @@ export const toHandleUnaryCall = <T extends grpc.handleUnaryCall<any, any>>(
       (err) => callback(err)
     )
   }
-  return (f as any) as T
+  return f as any as T
 }
 
 export const toHandleServerStreamingCall = <
@@ -72,7 +70,7 @@ export const toHandleServerStreamingCall = <
     call.end()
   }
 
-  return (f as any) as T
+  return f as any as T
 }
 
 export const toHandleClientStreamingCall = <
@@ -109,7 +107,7 @@ export const toHandleClientStreamingCall = <
     )
   }
 
-  return (f as any) as T
+  return f as any as T
 }
 
 export const toHandleBidiStreamingCall = <
@@ -154,5 +152,5 @@ export const toHandleBidiStreamingCall = <
     call.end()
   }
 
-  return (f as any) as T
+  return f as any as T
 }

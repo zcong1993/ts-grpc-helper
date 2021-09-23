@@ -79,7 +79,7 @@ export function promisifyClientStream<
     })
   })
 
-  return ([call, p] as any) as [
+  return [call, p] as any as [
     ReturnType<T>,
     GetOverloadReturnType<PromisifyClientStream<T>>
   ]

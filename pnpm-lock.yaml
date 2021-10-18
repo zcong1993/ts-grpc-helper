@@ -6,21 +6,16 @@ specifiers:
   '@types/node': ^16.11.1
   '@typescript-eslint/eslint-plugin': ^5.0.0
   '@typescript-eslint/parser': ^5.0.0
-  chalk: ^4.1.2
-  conventional-changelog-cli: ^2.1.1
+  '@zcong/js-release': ^0.2.5
   eslint: ^8.0.1
   eslint-config-prettier: ^8.3.0
   eslint-plugin-import: ^2.25.2
-  execa: ^5.1.1
   google-protobuf: ^3.18.1
   husky: ^7.0.2
   jest: ^27.3.0
   lint-staged: ^11.2.3
-  minimist: ^1.2.5
   prettier: ^2.4.1
-  prompts: ^2.4.2
   rxjs: ^7.4.0
-  semver: ^7.3.5
   ts-jest: ^27.0.7
   typescript: ^4.4.4
 
@@ -33,20 +28,15 @@ devDependencies:
   '@types/node': 16.11.1
   '@typescript-eslint/eslint-plugin': 5.0.0_3b49a3094ddb22ccc5b4c2c2360792e0
   '@typescript-eslint/parser': 5.0.0_eslint@8.0.1+typescript@4.4.4
-  chalk: 4.1.2
-  conventional-changelog-cli: 2.1.1
+  '@zcong/js-release': 0.2.5
   eslint: 8.0.1
   eslint-config-prettier: 8.3.0_eslint@8.0.1
   eslint-plugin-import: 2.25.2_eslint@8.0.1
-  execa: 5.1.1
   google-protobuf: 3.18.1
   husky: 7.0.2
   jest: 27.3.0
   lint-staged: 11.2.3
-  minimist: 1.2.5
   prettier: 2.4.1
-  prompts: 2.4.2
-  semver: 7.3.5
   ts-jest: 27.0.7_ae6fe55845de00766954c1a1e71fa583
   typescript: 4.4.4
 
@@ -963,6 +953,20 @@ packages:
       eslint-visitor-keys: 3.0.0
     dev: true
 
+  /@zcong/js-release/0.2.5:
+    resolution: {integrity: sha512-XEsGcPwbAOb3iTfQL33lAYnEE+F2puodT4yeQLs86+J9Zx3tkmvQqRW9Q+PLOAnsFfZjUz9r0ezkIEVw+q3fpQ==}
+    hasBin: true
+    dependencies:
+      add-stream: 1.0.0
+      chalk: 4.1.2
+      conventional-changelog: 3.1.24
+      execa: 5.1.1
+      minimist: 1.2.5
+      prompts: 2.4.2
+      semver: 7.3.5
+      tempfile: 3.0.0
+    dev: true
+
   /JSONStream/1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}
     hasBin: true
@@ -1421,18 +1425,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       q: 1.5.1
-    dev: true
-
-  /conventional-changelog-cli/2.1.1:
-    resolution: {integrity: sha512-xMGQdKJ+4XFDDgfX5aK7UNFduvJMbvF5BB+g0OdVhA3rYdYyhctrIE2Al+WYdZeKTdg9YzMWF2iFPT8MupIwng==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      add-stream: 1.0.0
-      conventional-changelog: 3.1.24
-      lodash: 4.17.21
-      meow: 8.1.2
-      tempfile: 3.0.0
     dev: true
 
   /conventional-changelog-codemirror/2.0.8:
@@ -2501,12 +2493,6 @@ packages:
     hasBin: true
     dependencies:
       ci-info: 3.2.0
-    dev: true
-
-  /is-core-module/2.6.0:
-    resolution: {integrity: sha512-wShG8vs60jKfPWpF2KZRaAtvt3a20OAn7+IJ6hLPECpSABLcKtFKTTI4ZtH5QcBruBHlq+WsdHWyz0BCZW7svQ==}
-    dependencies:
-      has: 1.0.3
     dev: true
 
   /is-core-module/2.8.0:
@@ -3582,7 +3568,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       hosted-git-info: 4.0.2
-      is-core-module: 2.6.0
+      is-core-module: 2.8.0
       semver: 7.3.5
       validate-npm-package-license: 3.0.4
     dev: true
@@ -4561,6 +4547,7 @@ packages:
     resolution: {integrity: sha512-rtPMlmcO4agTUfz10CbgJ1k6UAoXM2gWb3GoMPPZB/+/Ackf8lNWk11K4rYi2D0apgoFRLtQOZhb+/iGNJq26A==}
     engines: {node: '>=0.8.0'}
     hasBin: true
+    requiresBuild: true
     dev: true
     optional: true
 

@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js'
-import { from, Subject } from 'rxjs'
+import { firstValueFrom, from, Subject } from 'rxjs'
 import { toArray } from 'rxjs/operators'
 import {
   observerToWriteStream,
@@ -178,7 +178,7 @@ export const testDuplexStream = (c: HelloClient) => {
 
     sub.complete()
 
-    const res = await result$.pipe(toArray()).toPromise()
+    const res = await firstValueFrom(result$.pipe(toArray()))
     expect(res.map((r) => r.toObject())).toEqual(reqs.map((r) => r.toObject()))
   })
 
@@ -207,7 +207,7 @@ export const testDuplexStream = (c: HelloClient) => {
 
     sub.complete()
 
-    const res = await result$.pipe(toArray()).toPromise()
+    const res = await firstValueFrom(result$.pipe(toArray()))
     expect(res.map((r) => r.toObject())).toEqual(reqs.map((r) => r.toObject()))
 
     cb()

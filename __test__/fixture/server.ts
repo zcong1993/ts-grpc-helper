@@ -9,10 +9,12 @@ import {
 } from '../../src'
 import * as hello_pb from './generated/hello_pb'
 import { IHelloServer, HelloService } from './generated/hello_grpc_pb'
+import { setTimeout } from 'timers/promises'
 
 const helloServer: IHelloServer = {
   echo: toHandleUnaryCall(async (req, md, call) => {
     call.sendMetadata(md)
+    await setTimeout(200)
     return req
   }),
   serverStream: toHandleServerStreamingCall(async (req, md, call) => {

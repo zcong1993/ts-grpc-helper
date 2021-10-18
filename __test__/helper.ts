@@ -6,6 +6,8 @@ import {
   promisifyClientStream,
   promisifyUnaryCall,
   readStreamToObserver,
+  setDeadlineHeader,
+  setTimeoutHeader,
 } from '../src'
 import { HelloClient } from './fixture/generated/hello_grpc_pb'
 import * as pb from './fixture/generated/hello_pb'
@@ -41,6 +43,31 @@ export const testUnaryCall = (c: HelloClient) => {
     const resp = await promisifyUnaryCall(c.echo, c)(req, m)
     expect(resp.res).toEqual(req)
     expect(resp.metadata.getMap()['hello']).toEqual('xxx')
+  })
+
+  it('works with deadlines setTimeoutHeader', async () => {
+    const req = new pb.EchoRequest()
+    req.setMessage('test')
+    const m = new grpc.Metadata()
+    setTimeoutHeader(m, 100)
+    await expect(() =>
+      promisifyUnaryCall(c.echo, c)(req, m)
+    ).rejects.toThrowError('4 DEADLINE_EXCEEDED: Deadline exceeded')
+  })
+
+  it('works with deadlines setDeadlineHeader', async () => {
+    const req = new pb.EchoRequest()
+    req.setMessage('test')
+    const m = new grpc.Metadata()
+    setDeadlineHeader(m, Date.now() + 100)
+    await expect(() =>
+      promisifyUnaryCall(c.echo, c)(req, m)
+    ).rejects.toThrowError('4 DEADLINE_EXCEEDED: Deadline exceeded')
+  })
+
+  it('test invalid deadline', () => {
+    const m = new grpc.Metadata()
+    expect(() => setDeadlineHeader(m, Infinity)).toThrow()
   })
 }
 

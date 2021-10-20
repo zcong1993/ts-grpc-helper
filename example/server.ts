@@ -15,7 +15,7 @@ const helloServer: IHelloServer = {
     call.sendMetadata(md)
     return req
   }),
-  serverStream: toHandleServerStreamingCall(async (req, md, call) => {
+  serverStream: toHandleServerStreamingCall(async (req, _md, _call) => {
     return from(Array(5).fill(req))
   }),
   clientStream: toHandleClientStreamingCall(async (req, md, call) => {
@@ -29,7 +29,7 @@ const helloServer: IHelloServer = {
 
     return res
   }),
-  duplexStream: toHandleBidiStreamingCall(async (req, md, call) => {
+  duplexStream: toHandleBidiStreamingCall(async (req, _md, _call) => {
     return req.pipe(
       map((data) => {
         console.log(data.toObject())

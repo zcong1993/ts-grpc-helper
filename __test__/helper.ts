@@ -12,12 +12,14 @@ import {
 import { HelloClient } from './fixture/generated/hello_grpc_pb'
 import * as pb from './fixture/generated/hello_pb'
 
+/* eslint-disable jest/no-export */
+
 const expectMd = (call: any, expectKey: string, expectVal: string) => {
   let mdReceived = false
 
   call.on('metadata', (md: grpc.Metadata) => {
     mdReceived = true
-    expect(md.getMap()['hello']).toEqual('xxx')
+    expect(md.getMap()[expectKey]).toEqual(expectVal)
   })
 
   return () => {
@@ -72,7 +74,7 @@ export const testUnaryCall = (c: HelloClient) => {
 }
 
 export const testServerStream = (c: HelloClient) => {
-  it('simple should works well', async () => {
+  it('server stream simple should works well', async () => {
     const req = new pb.EchoRequest()
     req.setMessage('test2')
     const st = c.serverStream(req)
@@ -86,7 +88,7 @@ export const testServerStream = (c: HelloClient) => {
     expect(i).toBe(5)
   })
 
-  it('with metadata should works well', async () => {
+  it('server stream with metadata should works well', async () => {
     const req = new pb.EchoRequest()
     req.setMessage('test2')
 
@@ -107,7 +109,7 @@ export const testServerStream = (c: HelloClient) => {
 }
 
 export const testClientStream = (c: HelloClient) => {
-  it('simple should works well', async () => {
+  it('client stream simple should works well', async () => {
     const [call, p] = promisifyClientStream(c.clientStream, c)
     let last: pb.EchoRequest
 
@@ -129,7 +131,7 @@ export const testClientStream = (c: HelloClient) => {
     expect(resp).toEqual(last)
   })
 
-  it('with metadata should works well', async () => {
+  it('client stream with metadata should works well', async () => {
     const m = new grpc.Metadata()
     m.set('hello', 'xxx')
 
@@ -158,7 +160,7 @@ export const testClientStream = (c: HelloClient) => {
 }
 
 export const testDuplexStream = (c: HelloClient) => {
-  it('simple should works well', async () => {
+  it('duplex stream simple should works well', async () => {
     const call = c.duplexStream()
 
     const sub = new Subject<pb.EchoRequest>()
@@ -182,7 +184,7 @@ export const testDuplexStream = (c: HelloClient) => {
     expect(res.map((r) => r.toObject())).toEqual(reqs.map((r) => r.toObject()))
   })
 
-  it('with metadata should works well', async () => {
+  it('duplex stream with metadata should works well', async () => {
     const m = new grpc.Metadata()
     m.set('hello', 'xxx')
 

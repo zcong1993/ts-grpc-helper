@@ -3,3 +3,4 @@
 example/** linguist-vendored
 __test__/fixture/generated/* linguist-generated
 scripts/* linguist-vendored
+.husky/* linguist-vendored
